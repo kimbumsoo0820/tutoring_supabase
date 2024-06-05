@@ -1,0 +1,23 @@
+/* 모달의 배경 */
+.modalBackdrop {
+    position: fixed; /* 고정 위치 */
+    top: 0;
+    left: 0;
+    width: 100%; /* 전체 너비 */
+    height: 100%; /* 전체 높이 */
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명 검은색 배경 */
+    display: flex; /* 내용을 중앙에 위치시키기 위해 flex 사용 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    z-index: 1000; /* 다른 요소들 위에 표시 */
+  }
+  
+  /* 모달의 내용 */
+  .modalContent {
+    background-color: white; /* 배경색 */
+    padding: 20px; /* 패딩 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    width: 90%; /* 너비, 필요에 따라 조정 가능 */
+    max-width: 500px; /* 최대 너비 */
+  }

@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import apiCaller from '../api/apiCaller'
 import supabase from '../supabase/supabaseClient'
+import Modal from '../components/Modal'
+import useModal from '../hooks/useModal'
 const Home = () => {
     const [postData,setPostData] = useState()
     const [isLoading, setIsLoading] = useState(true)
@@ -14,6 +16,8 @@ const Home = () => {
 
     const title = useRef('')
     const content = useRef('')
+
+    const {isOpen, openModal, closeModal} = useModal()
 
 
     useEffect(()=> {
@@ -61,6 +65,7 @@ const Home = () => {
         const postContent = content.current.value
         const res = await apiCaller.post.writePost({id, postTitle, postContent})
         console.log('post res =>', res)
+        closeModal()
     }
 
     const onClickLoginCheck = async() => {
@@ -92,7 +97,7 @@ const Home = () => {
             <button style={{marginLeft:"15px"}}>회원가입</button>
         </form>
 
-        <div style={{marginTop: "50px"}}>로그인</div>
+        <div style={{marginTop: "50px"}} >로그인</div>
         <form onSubmit={handleSignin}>
             <label htmlFor="signIn_email">이메일</label>
             <input type="text" id='signIn_email' ref={signInEmail}/>
@@ -105,26 +110,29 @@ const Home = () => {
         <div>{loginUser?.email}</div>
         <div>{loginUser?.id}</div>
 
-        <div style={{marginTop:"50px"}}>
-            <h2>포스트 작성</h2>
-            <form onSubmit={handleWrite}>
-                <div>
+        <button style={{marginTop:"50px"}} onClick={openModal}>글작성</button>
+        <Modal isOpen={isOpen} closeModal={closeModal}>
+            <div >
+                <h2>포스트 작성</h2>
+                <form onSubmit={handleWrite}>
                     <div>
-                        <label htmlFor="title">제목</label>
-                        <input type="text" id="title" ref={title}/>
+                        <div>
+                            <label htmlFor="title">제목</label>
+                            <input type="text" id="title" ref={title}/>
+                        </div>
+                        <div>
+                            <label htmlFor="content">내용</label>
+                            <input type='text' id='content' ref={content}/>
+                        </div>
+                        <div>
+                            <label htmlFor="image">프로필 등록</label>
+                            <input style={{marginLeft:'50px'}} type="file" id='image' name='profile' accept='image/*' onChange={onChangeImage} />
+                        </div>
+                        <button >작성</button>
                     </div>
-                    <div>
-                        <label htmlFor="content">내용</label>
-                        <input type='text' id='content' ref={content}/>
-                    </div>
-                    <div>
-                        <label htmlFor="image">프로필 등록</label>
-                        <input style={{marginLeft:'50px'}} type="file" id='image' name='profile' accept='image/*' onChange={onChangeImage} />
-                    </div>
-                    <button>작성</button>
-                </div>
-            </form>
-        </div>
+                </form>
+            </div>
+        </Modal>
         {postData.map(({id, title, content, created_at})=>(
             <ul key={id}>
                 <li>
